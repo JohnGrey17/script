@@ -273,51 +273,52 @@
     }
 
     function createWidget(){
-        if(document.getElementById('processTasksBtn')) return;
+    if(document.getElementById('processTasksBtn')) return;
 
-        const btn = document.createElement('div');
-        btn.id = 'processTasksBtn';
-        btn.innerHTML = `
-            <div class="clippyPaperclip">
-                <div class="clippyEyes">
-                    <span></span><span></span>
-                </div>
+    const btn = document.createElement('div');
+    btn.id = 'processTasksBtn';
+    btn.innerHTML = `
+        <div class="clippyPaperclip">
+            <div class="clippyEyes">
+                <span></span><span></span>
             </div>
+        </div>
 
-            <div class="clippyBubble" id="clippyBubbleText">
-                Якщо потрібна допомога — натисни на мене
-            </div>
-        `;
-        document.body.appendChild(btn);
+        <div class="clippyBubble" id="clippyBubbleText">
+            Якщо потрібна допомога — натисни на мене
+        </div>
+    `;
+    document.body.appendChild(btn);
 
-        const panel = document.createElement('div');
-        panel.id = 'processTasksPanel';
-        panel.innerHTML = `
-            <div class="processTasksHeader">
-                <span>Скріпочка-помічник</span>
-                <span id="processTasksClose">✕</span>
-            </div>
+    const panel = document.createElement('div');
+    panel.id = 'processTasksPanel';
+    panel.innerHTML = `
+        <div class="processTasksHeader">
+            <span>Скріпочка-помічник</span>
+            <span id="processTasksClose">✕</span>
+        </div>
 
-            <div id="processTasksContent"></div>
-        `;
-        document.body.appendChild(panel);
+        <div id="processTasksContent"></div>
+    `;
+    document.body.appendChild(panel);
 
-        renderMainMenu();
+    btn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
 
-        btn.addEventListener('click', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            panel.classList.toggle('open');
-        });
+        panel.classList.add('open');
 
-        document.getElementById('processTasksClose').addEventListener('click', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            panel.classList.remove('open');
-        });
+        requestInstruction();
+    });
 
-        startRandomBubblePhrases();
-    }
+    document.getElementById('processTasksClose').addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        panel.classList.remove('open');
+    });
+
+    startRandomBubblePhrases();
+}
 
     if(document.readyState === 'loading'){
         document.addEventListener('DOMContentLoaded', createWidget);
