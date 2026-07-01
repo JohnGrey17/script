@@ -61,60 +61,18 @@
         return findValueByCaption('Етап');
     }
 
-    function renderMainMenu(){
-        const content = document.getElementById('processTasksContent');
-        if(!content) return;
-
-        content.innerHTML = `
-            <div class="kb-card">
-                <h3>Привіт 👋</h3>
-
-                <p>
-                    Натисни кнопку нижче, щоб отримати інструкцію
-                    для поточного етапу процесу.
-                </p>
-
-                <button id="loadStageInfoBtn" class="kb-main-btn">
-                    Інформація про етап
-                </button>
-
-                <button id="createSupportTaskBtn" class="kb-support-btn">
-                    Створити завдання на підтримку OneBox
-                </button>
-            </div>
-        `;
-
-        const loadBtn = document.getElementById('loadStageInfoBtn');
-
-        if(loadBtn){
-            loadBtn.addEventListener('click', function(e){
-                e.preventDefault();
-                requestInstruction();
-            });
-        }
-
+    function bindSupportButton(){
         const supportBtn = document.getElementById('createSupportTaskBtn');
 
-        if(supportBtn){
-            supportBtn.addEventListener('click', function(e){
-                e.preventDefault();
+        if(!supportBtn) return;
 
-                window.open(
-                    'https://vyriy.1b.app/form/0/4/',
-                    '_blank'
-                );
-            });
-        }
-    }
-
-    function bindBackButton(){
-        const btn = document.getElementById('backToClippyMenu');
-
-        if(!btn) return;
-
-        btn.addEventListener('click', function(e){
+        supportBtn.addEventListener('click', function(e){
             e.preventDefault();
-            renderMainMenu();
+
+            window.open(
+                'https://vyriy.1b.app/form/0/4/',
+                '_blank'
+            );
         });
     }
 
@@ -136,8 +94,18 @@
 
         if(!data || !data.found){
             content.innerHTML = `
-                <div class="kb-card kb-error">
-                    <h3>Інструкцію не знайдено</h3>
+                <div class="kb-card">
+                    <button id="createSupportTaskBtn" class="kb-support-btn">
+                        Заявка на техпідтримку
+                    </button>
+
+                    <h3 style="text-align:center; color:#111827; margin-top:18px;">
+                        ІНСТРУКЦІЯ
+                    </h3>
+
+                    <div class="kb-error" style="padding:12px; border-radius:12px;">
+                        Інструкцію не знайдено
+                    </div>
 
                     <p>Процес: <strong>${escapeHtml(processName)}</strong></p>
                     <p>Етап: <strong>${escapeHtml(stageName)}</strong></p>
@@ -149,26 +117,23 @@
                                 : 'Для цього процесу та етапу поки немає інструкції.'
                         )}
                     </p>
-
-                    <button id="backToClippyMenu" class="kb-secondary-btn">
-                        ← Назад до меню
-                    </button>
                 </div>
             `;
 
-            bindBackButton();
+            bindSupportButton();
             return;
         }
 
         content.innerHTML = `
             <div class="kb-card">
-                <div class="kb-label">Процес</div>
-                <h3>${escapeHtml(data.processName || processName)}</h3>
+                <button id="createSupportTaskBtn" class="kb-support-btn">
+                    Заявка на техпідтримку
+                </button>
 
-                <div class="kb-label">Етап</div>
-                <h4>${escapeHtml(data.stageName || stageName)}</h4>
+                <h3 style="text-align:center; color:#111827; margin-top:18px;">
+                    ІНСТРУКЦІЯ
+                </h3>
 
-                <div class="kb-label">Інструкція</div>
                 <div class="kb-instruction">
                     ${escapeHtml(data.instructions || '').replaceAll('\\n', '<br>')}
                 </div>
@@ -178,14 +143,10 @@
                     ? `<div class="kb-file">📎 Файл: ${escapeHtml(data.filePath)}</div>`
                     : ''
                 }
-
-                <button id="backToClippyMenu" class="kb-secondary-btn">
-                    ← Назад до меню
-                </button>
             </div>
         `;
 
-        bindBackButton();
+        bindSupportButton();
     }
 
     function showError(error){
@@ -193,20 +154,22 @@
         if(!content) return;
 
         content.innerHTML = `
-            <div class="kb-card kb-error">
-                <h3>Помилка запиту</h3>
+            <div class="kb-card">
+                <button id="createSupportTaskBtn" class="kb-support-btn">
+                    Заявка на техпідтримку
+                </button>
+
+                <h3 style="text-align:center; color:#dc2626; margin-top:18px;">
+                    Помилка запиту
+                </h3>
 
                 <p>Не вдалося отримати інструкцію з сервера.</p>
 
                 <small>${escapeHtml(error && error.message ? error.message : 'Невідома помилка')}</small>
-
-                <button id="backToClippyMenu" class="kb-secondary-btn">
-                    ← Назад до меню
-                </button>
             </div>
         `;
 
-        bindBackButton();
+        bindSupportButton();
     }
 
     function requestInstruction(){
@@ -273,52 +236,51 @@
     }
 
     function createWidget(){
-    if(document.getElementById('processTasksBtn')) return;
+        if(document.getElementById('processTasksBtn')) return;
 
-    const btn = document.createElement('div');
-    btn.id = 'processTasksBtn';
-    btn.innerHTML = `
-        <div class="clippyPaperclip">
-            <div class="clippyEyes">
-                <span></span><span></span>
+        const btn = document.createElement('div');
+        btn.id = 'processTasksBtn';
+        btn.innerHTML = `
+            <div class="clippyPaperclip">
+                <div class="clippyEyes">
+                    <span></span><span></span>
+                </div>
             </div>
-        </div>
 
-        <div class="clippyBubble" id="clippyBubbleText">
-            Якщо потрібна допомога — натисни на мене
-        </div>
-    `;
-    document.body.appendChild(btn);
+            <div class="clippyBubble" id="clippyBubbleText">
+                Якщо потрібна допомога — натисни на мене
+            </div>
+        `;
+        document.body.appendChild(btn);
 
-    const panel = document.createElement('div');
-    panel.id = 'processTasksPanel';
-    panel.innerHTML = `
-        <div class="processTasksHeader">
-            <span>Скріпочка-помічник</span>
-            <span id="processTasksClose">✕</span>
-        </div>
+        const panel = document.createElement('div');
+        panel.id = 'processTasksPanel';
+        panel.innerHTML = `
+            <div class="processTasksHeader">
+                <span>Скріпочка-помічник</span>
+                <span id="processTasksClose">✕</span>
+            </div>
 
-        <div id="processTasksContent"></div>
-    `;
-    document.body.appendChild(panel);
+            <div id="processTasksContent"></div>
+        `;
+        document.body.appendChild(panel);
 
-    btn.addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
+        btn.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
 
-        panel.classList.add('open');
+            panel.classList.add('open');
+            requestInstruction();
+        });
 
-        requestInstruction();
-    });
+        document.getElementById('processTasksClose').addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            panel.classList.remove('open');
+        });
 
-    document.getElementById('processTasksClose').addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        panel.classList.remove('open');
-    });
-
-    startRandomBubblePhrases();
-}
+        startRandomBubblePhrases();
+    }
 
     if(document.readyState === 'loading'){
         document.addEventListener('DOMContentLoaded', createWidget);
