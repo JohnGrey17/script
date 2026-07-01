@@ -68,6 +68,7 @@
 
         supportBtn.addEventListener('click', function(e){
             e.preventDefault();
+            e.stopPropagation();
 
             window.open(
                 'https://vyriy.1b.app/form/0/4/',
@@ -88,6 +89,14 @@
         `;
     }
 
+    function renderSupportButton(){
+        return `
+            <button id="createSupportTaskBtn" class="kb-support-btn">
+                Створити завдання на підтримку OneBox
+            </button>
+        `;
+    }
+
     function showInstruction(data, processName, stageName){
         const content = document.getElementById('processTasksContent');
         if(!content) return;
@@ -95,9 +104,7 @@
         if(!data || !data.found){
             content.innerHTML = `
                 <div class="kb-card">
-                    <button id="createSupportTaskBtn" class="kb-support-btn">
-                        Заявка на техпідтримку
-                    </button>
+                    ${renderSupportButton()}
 
                     <h3 style="text-align:center; color:#111827; margin-top:18px;">
                         ІНСТРУКЦІЯ
@@ -126,9 +133,7 @@
 
         content.innerHTML = `
             <div class="kb-card">
-                <button id="createSupportTaskBtn" class="kb-support-btn">
-                    Заявка на техпідтримку
-                </button>
+                ${renderSupportButton()}
 
                 <h3 style="text-align:center; color:#111827; margin-top:18px;">
                     ІНСТРУКЦІЯ
@@ -155,9 +160,7 @@
 
         content.innerHTML = `
             <div class="kb-card">
-                <button id="createSupportTaskBtn" class="kb-support-btn">
-                    Заявка на техпідтримку
-                </button>
+                ${renderSupportButton()}
 
                 <h3 style="text-align:center; color:#dc2626; margin-top:18px;">
                     Помилка запиту
